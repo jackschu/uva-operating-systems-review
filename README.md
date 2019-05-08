@@ -1,3 +1,9 @@
+# How to use:
+- In this file: each subheader is a major level topic, below each subheader is what kwon said to know for the final
+- Below is the table of contents of major level topics for all of my notes 
+- Each major level topic has its own notefile which is linked next to the topic title
+- Individual topics can be found in the [markdownfiles directory](./markdownfiles/)
+- Also at the bottom of this file is my notes for the final review lecture
 
 # Table of Contents
 
@@ -46,7 +52,7 @@
 
 <a id="org9d8b803"></a>
 
-## DMA/File System  [file systems](./markdownfiles/file-systems.md)
+## DMA/File System  [file systems notes](./markdownfiles/file-systems.md)
 
 -   Programmed I/O
 -   Direct Memory Access (DMA)
@@ -62,7 +68,7 @@
 
 <a id="org896f15b"></a>
 
-## More File system April 2-4 [file systems](./markdownfiles/file-systems.md)
+## More File system April 2-4 [file systems notes](./markdownfiles/file-systems.md)
 
 -   Performance, Fragmentation
 -   Non-binary search trees
@@ -76,7 +82,7 @@
 
 <a id="org87421c5"></a>
 
-## Sockets / Distributed systems April 9-11 [io](./markdownfiles/IO.md) [dist](./markdownfiles/distributed_systems.md)
+## Sockets / Distributed systems April 9-11 [io notes](./markdownfiles/IO.md) [distributed system notes](./markdownfiles/distributed_systems.md)
 
 -   Mailbox Abstraction (somehow important?) not really
 -   IPv4/IPv6
@@ -97,7 +103,7 @@
 
 <a id="org01a7485"></a>
 
-## More Distributed systems / Access Control [dist](./markdownfiles/distributed_systems.md) [access](./markdownfiles/access_control.md)
+## More Distributed systems / Access Control [distributed system notes](./markdownfiles/distributed_systems.md) [access control notes](./markdownfiles/access_control.md)
 
 -   Two-phase commit
     -   Worker failure
@@ -107,7 +113,7 @@
 
 <a id="org31b9fa8"></a>
 
-## Virtual Machines  [most of the notes](./markdownfiles/virtual_machines.md)
+## Virtual Machines  [virtual machine notes](./markdownfiles/virtual_machines.md)
 
 -   Shadow Page Table
 -   One approach to implementing: pure emulation
