@@ -82,7 +82,7 @@
 
 <a id="org87421c5"></a>
 
-## Sockets / Distributed systems April 9-11 [io notes](./markdownfiles/IO.md) [distributed system notes](./markdownfiles/distributed_systems.md)
+## Sockets / Distributed systems April 9-11 [io notes](./markdownfiles/IO.md), [distributed system notes](./markdownfiles/distributed_systems.md)
 
 -   Mailbox Abstraction (somehow important?) not really
 -   IPv4/IPv6
@@ -103,7 +103,7 @@
 
 <a id="org01a7485"></a>
 
-## More Distributed systems / Access Control [distributed system notes](./markdownfiles/distributed_systems.md) [access control notes](./markdownfiles/access_control.md)
+## More Distributed systems / Access Control [distributed system notes](./markdownfiles/distributed_systems.md), [access control notes](./markdownfiles/access_control.md)
 
 -   Two-phase commit
     -   Worker failure
