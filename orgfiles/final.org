@@ -1,0 +1,188 @@
+* Review for final
+
+** Virtual Memory [[file:virtual_mem.org][notes]]
+   - Page Cache comp
+   - Fw/Bkwrd Mapping
+   - Algorithms for cache replacement
+     + Belady's MIN
+     + LRU
+     + Second Chance
+     + SEQ
+     + CLOCK/CLOCK-Pro
+   - Multiple Mappings to a single Physical Page
+   - Terms
+     + Thrashing - Memory is fully occupied so no progress due to busy work
+     + Read-ahead - 
+     + more...
+
+** DMA/File System  [[file:file-systems.org][file systems]]
+   - Programmed I/O
+   - Direct Memory Access (DMA)
+   - IOMMU
+   - FAT file system
+     + Header
+     + Creating files, writing
+     + Disk scheduling algorithms
+     + Block remapping
+     + Xv6 disk-layout
+     + indirection
+
+** More File system April 2-4 [[file:file-systems.org][file systems]]
+   - Performance, Fragmentation
+   - Non-binary search trees
+   - RAID - how to calculate parity data (4,5,6)
+   - Mirroring disks
+   - Reliable FS
+     + FAT ordering
+     + inode-based FS
+     + redo logging
+
+** Sockets / Distributed systems April 9-11 [[file:IO.org][io]] [[file:distributed_systems.org][dist]] 
+   - Mailbox Abstraction (somehow important?) not really
+   - IPv4/IPv6
+   - FTP (corner cases on exam) very important
+   - Network API functions
+   - concepts
+     + Blocking/Non-blocking I/O
+     + Duplex/Half-duplex
+   - Remote Procedure Call RPC
+     + Marshalling
+     + IDL (Interface Description Language)
+   - Network File System (NFS)
+   - Stateful vs Stateless
+   - Consistency issues in NFS/AFS
+     + NFS can deal with inconsistency in block granularity
+     + AFS deals with it in file granularity
+
+** More Distributed systems / Access Control [[file:distributed_systems.org][dist]] [[file:access_control.org][access]]
+   - Two-phase commit
+     + Worker failure
+     + something (server failure)?
+   - Access control list
+
+** Virtual Machines  [[file:virtual_machines.org][most of the notes]]
+   - Shadow Page Table
+   - One approach to implementing: pure emulation
+     
+** Esp Important topics
+   - Virtual Memory
+   - Context Switch
+   - Schedulers
+   - Synchronization
+   - Threads
+
+
+* final review lecture notes
+
+** why use mmap
+   - convenient to load files into mem
+   - load code this way
+   - does copy on write for you
+   - how it works
+     + proc contrl block contains list of regions
+     + can share mmapd stuff with cache
+   - mmap can be used to shaRe memory b/w programs
+ 
+** for direct pointers
+   - note partial overhead is possible (and common)
+   - ie not all pointers have to be non-null
+
+** fs snapshots
+   - user point of view
+     + two or more copies of filesystem
+     + which represent different versions
+     + but save space when files in common
+   - implementation
+     + copy on write
+     + if two copies have one file thats different
+       * they'll have pointers to different inode arrays (literally all inodes (not 13-17))
+	 - inode array is stored in pieces
+	 - only parts which are different b/w two copies will have different points
+       * and only one inode will be diff b/w the two
+       * two inodes will have blocks in common where they share data
+     + details:
+       * normal file updates need to make new copies
+       * need to track reference counts
+
+** virtual machine quiz question
+   - suppose a guest os is running on vm using trap and emulate
+   - a user program running in guest os tries to access unallocated memory
+   - this mem will be alloc on demand by guest  os, what will happen
+     + user's mem will trigger page fault in host os
+     + WRONG: the host os pg fault handler will udpate the guest os system page table then resume
+       * not correct, because hypervisor doesnt touch guest page table itself
+       * guest os is the one that wants to ahve this allocated on deman, not the host os
+     + WRONG: host pg fault handler will cause guest os fault handler to run in kernel mode
+       * hyper never runs guest os in kernel mode (unless hw virt support)
+     + RIGHT: host pg fault handler will cause guest os fault handler to run in user mode
+       * "reflecting the exception"
+   - q2: last-level guest page table has ppn 0x40,
+   - guest physcial mem starts at 0x1000000 (machine pg num 0x1000, offset 0x0)
+     + 4k pages, 12-bit page offset
+   - what does the shadow pte corresponding to this look like
+   - mapped contiguously
+     + so  ppn 0x0 is mpn 0x1000
+     + ppn 0x1 is mpn 0x1001
+       + physical address 0x1000 is machi addr 0x1001000
+
+   - equivalently ppn 40 is what machine page number
+
+** programmed io vs dma
+   - programmed io
+     + buffer on device can do special things
+     + prob better for keyboard
+   - dma, buffer is in memory on machine
+     + os tells device where to put memory
+     + doesnt make sense for low data transfer devices
+     + better for usb
+     + even required for some graphics stuff since buffer would be too small otherwise
+
+** device controllver vs driver
+   - driver is on os
+     + response to interrupts, knows how to communicate with device controller
+   - contoller is part of device hardware
+
+** page replace policies
+   - real lru is too expense b/c page fault on every read or write
+   - approximations (not recently used)
+     + second chance (one list) mark accessed 
+     + seq
+       * keep two oredered list
+       * active assume prob used
+       * inactive guess unused
+       * move pages from active to inactive
+       * only update inactive pages as accessed
+     + clock: general idea of scan + clear "was it accessed information"
+       * and do something with recent history for each page
+       * ie was it acccessed when i checked it n times ago
+   - secondary family (when lru is wrong) eg files
+     + clockpro: allow things to be evicted if they arent accessed twice (with some interval in between or twice with read() calls)
+
+** pros and cons of FSs
+   - FAT filesystem
+     + simple to implement (major benefit)
+     + practical to implement with constrained memory? maybe
+     + less overhead, less built around caches (small benefit)
+     + seeking is v slow
+     + reliability is uhh bad (redundant fats but w/e)
+     + doesnt keep file and dir data close to each other
+     + dirs arent automatically close to files
+   - FFS-like filesystems
+     + use fragments (small files)
+     + blcok groups (close to each other)
+     + have all free-block info in one place
+   - other FS features
+     + extents:
+       - pro: good for large files
+       - con: more complicated to alloc/seek through
+     + trees for dirs
+       - pro: more effiicient to find filename in dir
+       - con: more complicated to do things
+     + jorurnaling/logging
+       + pro: recovery from failures
+       + pro: faster writes
+       + con: more complicated to implement
+       + con: doesnt eliminate data loss entirely
+
+
+
