@@ -8,12 +8,12 @@
 # Table of Contents
 
 1.  [Review for final](#org3bf0344)
-    1.  [Virtual Memory notes](#orgbf22ac7)
-    2.  [DMA/File System  file systems](#org9d8b803)
-    3.  [More File system April 2-4 file systems](#org896f15b)
-    4.  [Sockets / Distributed systems April 9-11 io dist](#org87421c5)
-    5.  [More Distributed systems / Access Control dist access](#org01a7485)
-    6.  [Virtual Machines  most of the notes](#org31b9fa8)
+    1.  [Virtual Memory ](#orgbf22ac7)
+    2.  [DMA/File System ](#org9d8b803)
+    3.  [More File system April 2-4](#org896f15b)
+    4.  [Sockets / Distributed systems April 9-11](#org87421c5)
+    5.  [More Distributed systems / Access Control](#org01a7485)
+    6.  [Virtual Machines](#org31b9fa8)
     7.  [Esp Important topics](#org437ad7d)
 2.  [final review lecture notes](#orgd0d77d2)
     1.  [why use mmap](#org85a7ceb)
