@@ -1,19 +1,19 @@
 
 # Table of Contents
 
-1.  [Monolithic vs microkernel](#org40d969f)
-    1.  [Monolithic](#org19ac054)
-    2.  [microkernel](#orgc5a75f0)
-    3.  [example microkernel seL4](#org576ab10)
-    4.  [other os designs](#org4fbcdec)
+1.  [Monolithic vs microkernel](#org9b2e53e)
+    1.  [Monolithic](#org5e33d5a)
+    2.  [microkernel](#orgedf60d9)
+    3.  [example microkernel seL4](#org97e4127)
+    4.  [other os designs](#org8dc37c3)
 
 
-<a id="org40d969f"></a>
+<a id="org9b2e53e"></a>
 
 # Monolithic vs microkernel
 
 
-<a id="org19ac054"></a>
+<a id="org5e33d5a"></a>
 
 ## Monolithic
 
@@ -21,7 +21,7 @@
 -   have everything in kernel thats convenient
 
 
-<a id="orgc5a75f0"></a>
+<a id="orgedf60d9"></a>
 
 ## microkernel
 
@@ -38,7 +38,7 @@
     -   virtual memory (do a lot less of this please)
 
 
-<a id="org576ab10"></a>
+<a id="org97e4127"></a>
 
 ## example microkernel seL4
 
@@ -48,7 +48,7 @@
 -   how to alloc memory?
     -   send message to kernel object asking for memory
     -   everything is a message
--   everything is capabilites
+-   everything is capabilities
     -   where to send/recv from
     -   can send capabilities via messages
 -   objects
@@ -65,7 +65,7 @@
     -   no kernel memory allocation built in to kernel
     -   even memory for kernel objects is not allocated by kernel (choice for proof)
 -   memory:
-    -   memeory starts as untyped objects (variable size, can be split)
+    -   memory starts as untyped objects (variable size, can be split)
     -   convert it to other things
     -   to alloc memory convert it to a frame
     -   can only be converted to one thing at a time
@@ -91,11 +91,11 @@
         -   scheduler can just switch from sender to receiver w/ minimal context switch
     -   send cases
         -   send to kernel obj: invoke kern handler reply
-        -   send to ready to recieve prog (schedulable): just switch now
-        -   send to program not ready to recieve: add thread to queue (switch to something else)
+        -   send to ready to receive prog (schedulable): just switch now
+        -   send to program not ready to receive: add thread to queue (switch to something else)
         -   send to invalid dest: reply with error
     -   sendrecv optimization:
-        -   combined system call, marked ready to recieve immediately after send
+        -   combined system call, marked ready to receive immediately after send
         -   avoids too much waiting
 -   notifications: async IPC
     -   works on binary semaphores
@@ -107,20 +107,20 @@
         -   exceptions are message sends, do page faults through this
 
 
-<a id="org4fbcdec"></a>
+<a id="org8dc37c3"></a>
 
 ## other os designs
 
 -   exokernel: (an extreme)
     -   kernel only provides hw interface,
     -   only filters hw usage for safety
-    -   kernel just askes programs which page to free
+    -   kernel just asks programs which page to free
     -   kernel only moves packets (no socket abstractions)
     -   kernel does not keep thread control blocks: library os tell me to run
     -   tell about io, dont do anything else in response to io
--   singlularity: (failed microsoft research)
+-   singularity: (failed Microsoft research)
     -   os runs CIL bytecode
     -   no page tables at all (system calls literally just function calls)
-    -   rely on bytecode to keep processes memory seperate
+    -   rely on bytecode to keep processes memory separate
     -   specture / meltdown leaks through caches makes this not work
 

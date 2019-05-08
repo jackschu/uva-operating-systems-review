@@ -1,21 +1,21 @@
 
 # Table of Contents
 
-1.  [Input Output CS4414](#org81d122a)
-    1.  [how to talk to IO devices (still a file)](#orgcf9220d)
-    2.  [device driver flow](#org7916987)
-    3.  [device files](#org1020ca5)
-    4.  [how are devices connected to processor](#orgb45439b)
-    5.  [devices and caching?](#orgec15ef4)
-    6.  [programmed i/o](#org825ba78)
+1.  [Input Output CS4414](#orgf19e287)
+    1.  [how to talk to IO devices (still a file)](#org69ea531)
+    2.  [device driver flow](#orgaf75648)
+    3.  [device files](#org2b8ff0d)
+    4.  [how are devices connected to processor](#org482a529)
+    5.  [devices and caching?](#org4b38ea6)
+    6.  [programmed i/o](#org282dfa0)
 
 
-<a id="org81d122a"></a>
+<a id="orgf19e287"></a>
 
 # Input Output CS4414
 
 
-<a id="orgcf9220d"></a>
+<a id="org69ea531"></a>
 
 ## how to talk to IO devices (still a file)
 
@@ -23,14 +23,14 @@
 -   what about options for devices or extra operations eg eject
     -   eg ioctl for weird things
 -   Linux has a struct for file<sub>operations</sub>
-    -   read write ulocked<sub>ioctl</sub> mmap open releases
+    -   read write unblocked<sub>ioctl</sub> mmap open releases
     -   special case block devices
 -   block devices (devices that work in terms of blocks) eg disk
     -   struct block<sub>device</sub><sub>operations</sub>
         -   open, release, rw<sub>page</sub>, ioctl (sector num = block num)
 
 
-<a id="org7916987"></a>
+<a id="orgaf75648"></a>
 
 ## device driver flow
 
@@ -46,7 +46,7 @@
     -   send more to device, if needed
 
 
-<a id="org1020ca5"></a>
+<a id="org2b8ff0d"></a>
 
 ## device files
 
@@ -63,20 +63,20 @@
     -   handle keyboard then signal done
 
 
-<a id="orgb45439b"></a>
+<a id="org482a529"></a>
 
 ## how are devices connected to processor
 
 -   device controller on memory bus
--   controller have control registers with emmory addresses
+-   controller have control registers with memory addresses
 -   reading or writing to a control register can cause something to happen
--   buffers and queues also exist on device controler that have memory addr
--   device controller signals interrupt controller (please call interupt)
+-   buffers and queues also exist on device controller that have memory addr
+-   device controller signals interrupt controller (please call interrupt)
 -   device controller is like memory that does extra shit
 -   sometimes theres a bus adapter that connect another adapter that has a device controller eg usb
 
 
-<a id="orgec15ef4"></a>
+<a id="org4b38ea6"></a>
 
 ## devices and caching?
 
@@ -91,7 +91,7 @@
     -   else data = inb(KBDATA) &#x2013; reads from data and clears buffer
 
 
-<a id="org825ba78"></a>
+<a id="org282dfa0"></a>
 
 ## programmed i/o
 
@@ -102,10 +102,10 @@
 -   even in parallel cus device controller does it :)
 -   also gives device controller huge buffer (saves money)
 -   downside: dma requires physical addr as device dont have page table
--   donwside: if device messes up, can overwrite arbitrary memory
+-   downside: if device messes up, can overwrite arbitrary memory
 -   therefore have IOMMU
     -   io memory management unit
     -   helpful for virtual machines
     -   not super common
-    -   pagetables for devices
+    -   page tables for devices
 

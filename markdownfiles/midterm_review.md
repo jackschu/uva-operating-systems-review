@@ -1,27 +1,27 @@
 
 # Table of Contents
 
-1.  [Midterm review for Operating Systems](#org4cb48e9)
-    1.  [Parital reads /writes](#orge2f4458)
-    2.  [Ker vs user mode](#org5691369)
-    3.  [context switching](#org533bc47)
-    4.  [differences b/w scheduling algos](#org7083887)
-    5.  [process vs threads](#org30cb506)
-    6.  [cache coherency](#org34ed22a)
-    7.  [addr translation](#org0644ccd)
-    8.  [race condition avoiding:](#org612f79f)
-    9.  [avoiding busy waits](#org3eb9105)
-    10. [implementing spinlock](#orgd39ea4b)
+1.  [Midterm review for Operating Systems](#org1c7a1f3)
+    1.  [Partial reads /writes](#orgcd71221)
+    2.  [Ker vs user mode](#org7022552)
+    3.  [context switching](#orgf831917)
+    4.  [differences b/w scheduling algos](#org3b3d23e)
+    5.  [process vs threads](#org2d331b8)
+    6.  [cache coherency](#orge776a7d)
+    7.  [addr translation](#orga999d48)
+    8.  [race condition avoiding:](#org07ba86b)
+    9.  [avoiding busy waits](#org439d347)
+    10. [implementing spin lock](#org7f1cdad)
 
 
-<a id="org4cb48e9"></a>
+<a id="org1c7a1f3"></a>
 
 # Midterm review for Operating Systems
 
 
-<a id="orge2f4458"></a>
+<a id="orgcd71221"></a>
 
-## Parital reads /writes
+## Partial reads /writes
 
 -   Posix has read write, partial writes can occur because:
 -   they return whatever they can (sometimes not everything)
@@ -29,7 +29,7 @@
 -   write what I can now, return how much I've written (wait at least one)
 
 
-<a id="org5691369"></a>
+<a id="org7022552"></a>
 
 ## Ker vs user mode
 
@@ -44,7 +44,7 @@
 -   switching to kernel mode ONLY happens via exception/trap/interrupt
 
 
-<a id="org533bc47"></a>
+<a id="orgf831917"></a>
 
 ## context switching
 
@@ -63,7 +63,7 @@
 -   user registers are saved b/c exception (NOT b/c of a context switch)
 
 
-<a id="org7083887"></a>
+<a id="org3b3d23e"></a>
 
 ## differences b/w scheduling algos
 
@@ -80,11 +80,11 @@
         -   wait time/ turnaround 
             -   interactivity optimizing  / get io to happen sooner
             -   SJF/SRTF &#x2013; ie run shortest CPU burst (cant do this)
-            -   MLFQ (multilevel feedback queue) (actually dooable)
-        -   meetind deadlines &#x2013; earliest deadline first
+            -   MLFQ (multilevel feedback queue) (actually doable)
+        -   meeting deadlines &#x2013; earliest deadline first
 
 
-<a id="org30cb506"></a>
+<a id="org2d331b8"></a>
 
 ## process vs threads
 
@@ -103,20 +103,20 @@
     -   current directory
 
 
-<a id="org34ed22a"></a>
+<a id="orge776a7d"></a>
 
 ## cache coherency
 
 -   invalid = not cached
--   modifed = cached copy thats newer than memory
+-   modified = cached copy thats newer than memory
 -   shared = multiple processors have valid cached copies
 
 
-<a id="org0644ccd"></a>
+<a id="orga999d48"></a>
 
 ## addr translation
 
--   take virt addr, spit into vpn, and page offser
+-   take virt addr, spit into vpn, and page offset
 -   split vpn into parts for each level
 -   do an array lookup based on split for vpn at each level
 -   use given base addr for first level
@@ -125,7 +125,7 @@
 -   leading zeros are there sometimes
 
 
-<a id="org612f79f"></a>
+<a id="org07ba86b"></a>
 
 ## race condition avoiding:
 
@@ -133,15 +133,15 @@
 -   never assume anything about what happens while you dont have it locked
 
 
-<a id="org3eb9105"></a>
+<a id="org439d347"></a>
 
 ## avoiding busy waits
 
 -   scenario: waiting for event to happen
-    -   naive (busywait) continuously check if it happened
+    -   naive (busy wait) continuously check if it happened
 -   primitives to help:
     -   condition variables, (protected by lock)
-        -   check if happened else wait, when happens , get broadcast/singal
+        -   check if happened else wait, when happens , get broadcast/signal
         -   recheck on wake due to spurious wakeups
     -   semaphores:
         -   P/down/wait - wait to become positive then dec
@@ -154,9 +154,9 @@
         -   if someone's stared waiting then post (up) on semaphore
 
 
-<a id="orgd39ea4b"></a>
+<a id="org7f1cdad"></a>
 
-## implementing spinlock
+## implementing spin lock
 
 -   simplest strat: atomic operation that reads a val then writes LOCKED
 -   if we read unlocked, we know that this thread can go and lock it

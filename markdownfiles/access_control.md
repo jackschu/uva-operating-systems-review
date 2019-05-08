@@ -1,25 +1,25 @@
 
 # Table of Contents
 
-1.  [Access control](#org680aa96)
-    1.  [Proection/Security](#org8ae0a59)
-    2.  [Authorization / Authentication](#org541d033)
-    3.  [How does login work?](#orgdf12a95)
-    4.  [sudo](#orgc3bc4f5)
-        1.  [setuid bit](#org2827107)
-    5.  [Different UIDs real/effective/saved](#org7f4c22a)
-    6.  [Ambient authority v capabilities](#org9b0f351)
-    7.  [Sandboxing](#org7319502)
+1.  [Access control](#orgc51ee5a)
+    1.  [Protection/Security](#org30a6096)
+    2.  [Authorization / Authentication](#org99b5f42)
+    3.  [How does login work?](#orgad32dfb)
+    4.  [sudo](#org7462eba)
+        1.  [setuid bit](#orgcbbbfb6)
+    5.  [Different UIDs real/effective/saved](#orgf91e493)
+    6.  [Ambient authority v capabilities](#org94b2d23)
+    7.  [Sandboxing](#org89f60f2)
 
 
-<a id="org680aa96"></a>
+<a id="orgc51ee5a"></a>
 
 # Access control
 
 
-<a id="org8ae0a59"></a>
+<a id="org30a6096"></a>
 
-## Proection/Security
+## Protection/Security
 
 -   protection: mechanisms for controlling access
     -   page table, preemptive scheduling, encryption etc
@@ -31,7 +31,7 @@
     -   and can be clever
 
 
-<a id="org541d033"></a>
+<a id="org99b5f42"></a>
 
 ## Authorization / Authentication
 
@@ -42,7 +42,7 @@
     -   files and processes have r/w/x for each domain in table
 -   could store as access control list (store with file not in table)
     -   assign processes to protection domains
-    -   give processes user /group that is runing em
+    -   give processes user /group that is ruining em
     -   object has access based on user/group
     -   posix has uids (user ids) theres an effective userid
     -   also gid / effective gid, can get a list of groups
@@ -53,7 +53,7 @@
 -   or "on the side" eg apparmor via linux
 -   posix file permissions has r/w/x for uid, gid, and for others
     -   p inflexible
--   also theres an "access controll list" (noe the default one is also an acl)
+-   also theres an "access control list" (note the default one is also an acl)
     -   more flexibility, actual list, more fine grain
     -   posix says user rules > group rules
 -   auth checked on system call (eg open, kill etc) dont rely on libraries
@@ -61,7 +61,7 @@
 -   UID 0 is root / superuser, can bypass (almost) all permission checks
 
 
-<a id="orgdf12a95"></a>
+<a id="orgad32dfb"></a>
 
 ## How does login work?
 
@@ -75,7 +75,7 @@
 -   must be run with UID 0, and run semi automatically
 
 
-<a id="orgc3bc4f5"></a>
+<a id="org7462eba"></a>
 
 ## sudo
 
@@ -85,24 +85,24 @@
 -   so we just make sudo exe owned by root and set this bit
 
 
-<a id="org2827107"></a>
+<a id="orgcbbbfb6"></a>
 
 ### setuid bit
 
 -   if true then syscall changes effective uid to owners uid
 -   this acts as gate to higher privilege
 -   allows you to make auth decisions outside the kernel
--   super userful, eg change pass, mount USB stick, bind to port < 1024
+-   super useful, eg change pass, mount USB stick, bind to port < 1024
 -   eg have a printer user with appropriate executables
 -   however this stuff is v hard to write, there are v clever workarounds
 -   eg cant just pass file to printer to open, might just pass prot password file
     -   broken solution: if og user can read it then read it?
     -   fails b/c could change what the filename is pointing to and then race cond would allow access
     -   this is called TOCTTOU (time to check to time to use) problem
-    -   solution: temporariliy become original user
+    -   solution: temporarily become original user
 
 
-<a id="org7f4c22a"></a>
+<a id="orgf91e493"></a>
 
 ## Different UIDs real/effective/saved
 
@@ -118,7 +118,7 @@
 -   all these things exist as GID also set-group-id executables
 
 
-<a id="org9b0f351"></a>
+<a id="org94b2d23"></a>
 
 ## Ambient authority v capabilities
 
@@ -127,14 +127,14 @@
 -   capabilities: tokens to do things
     -   ie we the file itself has a key assoc with it
     -   eg fd, or page numbers kinda as tokens
-    -   inhereited by spawn programs
+    -   inherited by spawn programs
     -   can be sent over local sockets or pipes
     -   ex capsicum
         -   no global names
         -   fd have r/w/x/kill permissions
 
 
-<a id="org7319502"></a>
+<a id="org89f60f2"></a>
 
 ## Sandboxing
 
@@ -142,8 +142,8 @@
 -   doable because we don't need user's full permissions
 -   happens in browsers :D first major thing by Google Chrome
     -   sandbox the rendering engine
--   with ambient: create new user with few priviilege?
-    -   not greate because default user can do too much
+-   with ambient: create new user with few privilege?
+    -   not great because default user can do too much
     -   also creating new user is requires sysadmin perms
     -   dont want to create users for every app
 -   with capabilities: just discard most capabilities

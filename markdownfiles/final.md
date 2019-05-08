@@ -1,31 +1,31 @@
 
 # Table of Contents
 
-1.  [Review for final](#org3bf0344)
-    1.  [Virtual Memory notes](#orgbf22ac7)
-    2.  [DMA/File System  file systems](#org9d8b803)
-    3.  [More File system April 2-4 file systems](#org896f15b)
-    4.  [Sockets / Distributed systems April 9-11 io dist](#org87421c5)
-    5.  [More Distributed systems / Access Control dist access](#org01a7485)
-    6.  [Virtual Machines  most of the notes](#org31b9fa8)
-    7.  [Esp Important topics](#org437ad7d)
-2.  [final review lecture notes](#orgd0d77d2)
-    1.  [why use mmap](#org85a7ceb)
-    2.  [for direct pointers](#org211547a)
-    3.  [fs snapshots](#org2182cee)
-    4.  [virtual machine quiz question](#orgeadd939)
-    5.  [programmed io vs dma](#orge819b53)
-    6.  [device controllver vs driver](#org76f7e76)
-    7.  [page replace policies](#orgfc9b341)
-    8.  [pros and cons of FSs](#org95442d3)
+1.  [Review for final](#org80152ea)
+    1.  [Virtual Memory notes](#org6ffd7e5)
+    2.  [DMA/File System  file systems](#org3156e94)
+    3.  [More File system April 2-4 file systems](#org09252b2)
+    4.  [Sockets / Distributed systems April 9-11 io dist](#orgdef9c95)
+    5.  [More Distributed systems / Access Control dist access](#org13eefe6)
+    6.  [Virtual Machines  most of the notes](#org51de437)
+    7.  [Esp Important topics](#org7aa39fb)
+2.  [final review lecture notes](#orgf04e1e8)
+    1.  [why use mmap](#org2321551)
+    2.  [for direct pointers](#org36bc68f)
+    3.  [fs snapshots](#orga2265a6)
+    4.  [virtual machine quiz question](#org18de7cf)
+    5.  [programmed io vs dma](#org00b88ed)
+    6.  [device controller vs driver](#org7d5d0ac)
+    7.  [page replace policies](#orgdea066d)
+    8.  [pros and cons of FSs](#org7523b26)
 
 
-<a id="org3bf0344"></a>
+<a id="org80152ea"></a>
 
 # Review for final
 
 
-<a id="orgbf22ac7"></a>
+<a id="org6ffd7e5"></a>
 
 ## Virtual Memory [notes](virtual_mem.md)
 
@@ -44,7 +44,7 @@
     -   more&#x2026;
 
 
-<a id="org9d8b803"></a>
+<a id="org3156e94"></a>
 
 ## DMA/File System  [file systems](file-systems.md)
 
@@ -60,7 +60,7 @@
     -   indirection
 
 
-<a id="org896f15b"></a>
+<a id="org09252b2"></a>
 
 ## More File system April 2-4 [file systems](file-systems.md)
 
@@ -74,7 +74,7 @@
     -   redo logging
 
 
-<a id="org87421c5"></a>
+<a id="orgdef9c95"></a>
 
 ## Sockets / Distributed systems April 9-11 [io](IO.md) [dist](distributed_systems.md)
 
@@ -95,7 +95,7 @@
     -   AFS deals with it in file granularity
 
 
-<a id="org01a7485"></a>
+<a id="org13eefe6"></a>
 
 ## More Distributed systems / Access Control [dist](distributed_systems.md) [access](access_control.md)
 
@@ -105,7 +105,7 @@
 -   Access control list
 
 
-<a id="org31b9fa8"></a>
+<a id="org51de437"></a>
 
 ## Virtual Machines  [most of the notes](virtual_machines.md)
 
@@ -113,7 +113,7 @@
 -   One approach to implementing: pure emulation
 
 
-<a id="org437ad7d"></a>
+<a id="org7aa39fb"></a>
 
 ## Esp Important topics
 
@@ -124,12 +124,12 @@
 -   Threads
 
 
-<a id="orgd0d77d2"></a>
+<a id="orgf04e1e8"></a>
 
 # final review lecture notes
 
 
-<a id="org85a7ceb"></a>
+<a id="org2321551"></a>
 
 ## why use mmap
 
@@ -137,12 +137,12 @@
 -   load code this way
 -   does copy on write for you
 -   how it works
-    -   proc contrl block contains list of regions
+    -   proc control block contains list of regions
     -   can share mmapd stuff with cache
 -   mmap can be used to shaRe memory b/w programs
 
 
-<a id="org211547a"></a>
+<a id="org36bc68f"></a>
 
 ## for direct pointers
 
@@ -150,7 +150,7 @@
 -   ie not all pointers have to be non-null
 
 
-<a id="org2182cee"></a>
+<a id="orga2265a6"></a>
 
 ## fs snapshots
 
@@ -171,7 +171,7 @@
         -   need to track reference counts
 
 
-<a id="orgeadd939"></a>
+<a id="org18de7cf"></a>
 
 ## virtual machine quiz question
 
@@ -179,15 +179,15 @@
 -   a user program running in guest os tries to access unallocated memory
 -   this mem will be alloc on demand by guest  os, what will happen
     -   user's mem will trigger page fault in host os
-    -   WRONG: the host os pg fault handler will udpate the guest os system page table then resume
+    -   WRONG: the host os pg fault handler will update the guest os system page table then resume
         -   not correct, because hypervisor doesnt touch guest page table itself
-        -   guest os is the one that wants to ahve this allocated on deman, not the host os
+        -   guest os is the one that wants to have this allocated on demand, not the host os
     -   WRONG: host pg fault handler will cause guest os fault handler to run in kernel mode
         -   hyper never runs guest os in kernel mode (unless hw virt support)
     -   RIGHT: host pg fault handler will cause guest os fault handler to run in user mode
         -   "reflecting the exception"
 -   q2: last-level guest page table has ppn 0x40,
--   guest physcial mem starts at 0x1000000 (machine pg num 0x1000, offset 0x0)
+-   guest physical mem starts at 0x1000000 (machine pg num 0x1000, offset 0x0)
     -   4k pages, 12-bit page offset
 -   what does the shadow pte corresponding to this look like
 -   mapped contiguously
@@ -198,7 +198,7 @@
 -   equivalently ppn 40 is what machine page number
 
 
-<a id="orge819b53"></a>
+<a id="org00b88ed"></a>
 
 ## programmed io vs dma
 
@@ -212,16 +212,16 @@
     -   even required for some graphics stuff since buffer would be too small otherwise
 
 
-<a id="org76f7e76"></a>
+<a id="org7d5d0ac"></a>
 
-## device controllver vs driver
+## device controller vs driver
 
 -   driver is on os
     -   response to interrupts, knows how to communicate with device controller
--   contoller is part of device hardware
+-   controller is part of device hardware
 
 
-<a id="orgfc9b341"></a>
+<a id="orgdea066d"></a>
 
 ## page replace policies
 
@@ -229,19 +229,19 @@
 -   approximations (not recently used)
     -   second chance (one list) mark accessed
     -   seq
-        -   keep two oredered list
+        -   keep two ordered list
         -   active assume prob used
         -   inactive guess unused
         -   move pages from active to inactive
         -   only update inactive pages as accessed
     -   clock: general idea of scan + clear "was it accessed information"
         -   and do something with recent history for each page
-        -   ie was it acccessed when i checked it n times ago
+        -   ie was it accessed when i checked it n times ago
 -   secondary family (when lru is wrong) eg files
-    -   clockpro: allow things to be evicted if they arent accessed twice (with some interval in between or twice with read() calls)
+    -   clock pro: allow things to be evicted if they arent accessed twice (with some interval in between or twice with read() calls)
 
 
-<a id="org95442d3"></a>
+<a id="org7523b26"></a>
 
 ## pros and cons of FSs
 
@@ -255,16 +255,16 @@
     -   dirs arent automatically close to files
 -   FFS-like filesystems
     -   use fragments (small files)
-    -   blcok groups (close to each other)
+    -   block groups (close to each other)
     -   have all free-block info in one place
 -   other FS features
     -   extents:
         -   pro: good for large files
         -   con: more complicated to alloc/seek through
     -   trees for dirs
-        -   pro: more effiicient to find filename in dir
+        -   pro: more efficient to find filename in dir
         -   con: more complicated to do things
-    -   jorurnaling/logging
+    -   journaling/logging
         -   pro: recovery from failures
         -   pro: faster writes
         -   con: more complicated to implement

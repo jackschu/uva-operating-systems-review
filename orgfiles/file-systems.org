@@ -17,10 +17,10 @@
    - start locations
      + want filenames
      + start locations, size, filename store in directories (also files)
-     + directories have a list of entres (directory entree is fixed size)
+     + directories have a list of entries (directory entree is fixed size)
      + directory entree attr field indicates long dir or short (reg) dir
        * indicates type of file
-     + 0x00 as first char of nam means end of directory
+     + 0x00 as first char of name means end of directory
        * 0xE5 means 'hole' from deletion
    - header has metadata about system
      + where is root dir
@@ -56,19 +56,19 @@
        * zig zag back and forth (may favor center)
      + C-SCAN
        * out to in, reset to outside repeat
-   - controller has a cache too, can hold data waiting to be writen
+   - controller has a cache too, can hold data waiting to be written
 
 ** SSD
    - big ol controller
    - no moving parts, read sector-like sizes (pages) eg 4k or 16kb
    - can only erase in blocks
    - can only erase blocks order of 10,000-100,000 times
-   - moves things around to create ersure blocks
-   - wear levening - spread writes out
+   - moves things around to create erasure blocks
+   - wear leavening - spread writes out
    - Flash translation layer, maps os sector to our sectors
    - write at writehead,
-   - garbage collection: copy parially written blocks to writehead to consolodate free space
-   - operation: TRIM, drop this sector, good for os to help ssd
+   - garbage collection: copy partially written blocks to writehead to consolidate free space
+   - operation: TRIM, drop this sector, good for os to help SSD
 
 ** xv6 filesystem
    - similar to modern unix
@@ -89,8 +89,8 @@
      + each dir referencing an inode is called a hard link
    - adv over fat
      + reliability via logs
-     + easiesr to scan for free blocks
-     + easyier to find kth block
+     + easier to scan for free blocks
+     + easier to find kth block
      + file type/size stored in inode together
    - cons
      + inode block map is far from file data so long seek time
@@ -121,7 +121,7 @@
    - every file can have multiple links 
    - track number of links delete files with 0 links
    - open files are links too
-     + so can do trick: create, open, delete (doesnt dissapear until close)
+     + so can do trick: create, open, delete (doesnt disappear until close)
    - ln -> link()
    - rm -> unlink()
    - softlinks / symbolic links
@@ -133,19 +133,19 @@
 
 
 ** fast file system
-   - made by berkley, linux is based on this
+   - made by Berkeley, linux is based on this
    - address: inode block map far from data, bad choice of file/dir data blocks
    - block groups
      + split disk into block groups, each of which is like mini file system
      + therefore data is close to inodes
      + inodes from one block group can point to data in another block group
-       * but perfer not to 
+       * but prefer not to 
      + also keep free map in block group,
      + makes lower seek time within directory
      + block groups are designated for specific directories
    - find free block by first free blocks within block group
      + hope that for large file this ends up being contiguous
-   - deliberately underutilize disk
+   - deliberately under utilize disk
      + maintain 10% of blocks listed free
      + that way we can take into account percent full of each block group
      + use this in some complicated way
@@ -217,7 +217,7 @@
       2) file data block
       3) new file inode
       4) free block map for new dir block
-      5) new dir entry for file (in dir blocK)
+      5) new dir entry for file (in dir block)
       6) update directory inode
       7) phil: better to waste space than point to bad data
     - recovery: fsck (chkdsk on windows)
@@ -230,7 +230,7 @@
       1) overwrite directory entree
       2) decrement link count in inode
     - ex: unlink last link
-      1) ovewrite last dir entree for file
+      1) overwrite last dir entree for file
       2) mark inode data as free
       3) mark inode as free
     - ordering sucks for disk speed though
@@ -241,10 +241,10 @@
 	* in log: mark begin (stuff im prob gunna do VV)
 	* write what youre gunna do 
 	* mark commit (i am now promising to do this^)
-	* start apply log ti disk
+	* start apply log to disk
 	* when commit reached, clear log
       + if crash before commit, just dont do it
-      + if crash after commit, just redo it (incase it wasnt done)
+      + if crash after commit, just redo it (in-case it wasnt done)
       + consistency b/c commit message and stuff w/in one sector
     - logged things should be idempotent (ok to do twice)
     - redo logging file systems called journaling filesystems
@@ -253,7 +253,7 @@
 	* we check if non-zero on boot^ if so redo transaction
       + data of transactions (blocks) ('what im gunna do' part)
       + only commit when no active file operation or not enough room in log for more
-    - faster to do a large transactioN
+    - faster to do a large transaction
     - problems
       + log size - garbage collect log in background
       + writing everything twice - makes it expensive?
@@ -267,8 +267,8 @@
       + make a new (current) inode with copy on write of file data
       + old inode lives on with copies of old data
     - dont want to copy new whole inode array for every version
-    - so we split inode array into peices with a root inode pointing to peices
-    - then the peices are copy on write with a copy of root inode
+    - so we split inode array into pieces with a root inode pointing to pieces
+    - then the pieces are copy on write with a copy of root inode
     - array of root inodes is the history
     - copy on write also avoids the cost of logging since avoids copying
 

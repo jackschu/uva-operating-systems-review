@@ -9,7 +9,7 @@
    - deadlock detection
      + dependency graph to detect
      + single resource: look for cycles
-     + mutli-resource: imagine threads finishing
+     + multi-resource: imagine threads finishing
      + thing called Baker's Algorithm: if it will cause deadlock: dont start
 
 ** Toy example
@@ -32,7 +32,7 @@
 ** The XV-6 way
    - Page Directory Index PDX is first level page table index
    - Page Table Index PTX is the second level table index
-   - Page frame is a physical page (intell)
+   - Page frame is a physical page (Intel)
    - kernbase = 0x8000000 , above it is kernel only memory
    - every physical addr in xv6 has two virtual addrs, one for ker, one for user
    - P2V and V2P map kernel virtual to physical (!not user virtual)
@@ -41,7 +41,7 @@
 
 ** space on demand
    - useful to telling program they have huge RAM
-   - trick: push decreases rsp first so uhh invald page num might be lower
+   - trick: push decreases rsp first so uhh invalid page num might be lower
    - xv6 checks bounds using sz
 
 ** copy on write
@@ -52,7 +52,7 @@
 ** mmap
    - map a file to spot in memory
    - eg:
-     + int file = open("somefile.dat", O_RDWR);
+     + int file = open("some-file.dat", O_RDWR);
      + char *data = mmap(... , file, 0);
      + data[100] = 'x';
    - options: 
@@ -98,7 +98,7 @@
 
 ** on miss 
    - file: OS data structure based on filesystem
-     + filesystem is black box which gives pys addr
+     + filesystem is black box which gives phys addr
    - virtual address (if part of file): use linux mmap regions
    - swapped out pages get location stored in unused region of invalid pte
      + note that this is elegant because pte only gets overwrote if
@@ -106,7 +106,7 @@
      + recall you can have a full cache without having a 'full' page table
        * full page table doesnt really happen
 
-** physical pages are manged
+** physical pages are managed
    - how to find free physical page to use
    - track usage (linux uses a list of LRU pages) (a lil more complex than this)
    - physical page might need to be evicted to disk, how do we do that
@@ -120,7 +120,7 @@
 	 * has pointer to page table
 	 * so that given ppn, we can remove/ invalidate references to that page
        * for non-file pages linux:
-	 * every page ihas linked list of mmap regions
+	 * every page has linked list of mmap regions
 	   - list is important b/c makes fork easy
 	 * which points to mmap region info
 	 * points to proc control block
@@ -146,7 +146,7 @@
      * since algo for choosing could be slow
      * cost of miss could be dramatically variable (ie NFS vs HDD fetch)
      * create zero page could happen on miss (very fast)
-     * grouping reads not considered in hit rate, but considered in throuput
+     * grouping reads not considered in hit rate, but considered in throughput
 
        
      
@@ -161,7 +161,7 @@
   - mayb LRU is likely not part of working set, so use that
     + doesnt always work, there are bad cases (ie working set doesnt fit)
 
-*** aside zipf model <<zipf-model>>
+*** aside Zipf model <<zipf-model>>
     - straight line on log-log rank v count access graph
     - long tail
     - lru is ok for this
@@ -172,7 +172,7 @@
     - no one does this exactly since requires page fault on every access
     - so we approximate LRU = "was this accessed recently?"
     - is it currently still being used?
-      + can do sw approach: mark it invald check if page fault happens
+      + can do sw approach: mark it invalid check if page fault happens
 	* update last known access if accessed/referenced
       + can do hw approach: hardware sets a bit to 1 during access
 	* os periodically reads + record + clears access bit
@@ -212,28 +212,30 @@
    - CLOCK-Pro: special casing for one-use pages
      + files cant be protected in cache (by lru) until second access
      + new files to top of inactive list
-     + if on inactive list and referenced once, idk ingore but track
+     + if on inactive list and referenced once, idk ignore but track
      + if on inactive list and referenced twice, move to top of active
      + if on bottom of active list and referenced, move to top of active
      + else if on bottom of active, move to top of inactive
-     + results in evicting if refrenced once or referenced mult but not recently
+     + results in evicting if referenced once or referenced mult but not recently
 
 ** proactive loading
    - do we have to load into cache on demand? do it ahead of time?
-   - readahead: try and predict sequential reads
+   - read-ahead: try and predict sequential reads
    - naive irony, if naively load ahead, we dont page fault anymore so
      + we cant know if we should keep reading ahead (can force pg fault tho)
    - how much to readahead?
      + read faster than prog needs but not by much
      + read ahead x amount, set trap at x/2 ish, then read more if triggered
 
-** thrasing
+** thrashing
    - always reading from disk, causes performance collapse
 
 ** fair paging replacement?
    - share between users?
    - linux has cgroups
-     + each has high limit- cant use more than this many pages (replace thiers first)
+     + each has high limit- cant use more than this many pages (replace theirs first)
      + low limit - dont steal from this group when using less than this many
      + max - actively deallocate if youre using
      
+
+

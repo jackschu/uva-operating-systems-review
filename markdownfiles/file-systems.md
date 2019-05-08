@@ -1,34 +1,34 @@
 
 # Table of Contents
 
-1.  [Filesystems](#orgebedee3)
-    1.  [hard drive interfaces](#org99ec366)
-    2.  [FAT file system](#org99e1c9f)
-    3.  [hard drive operation / performance](#org2a6f6cf)
-    4.  [SSD](#org757ca40)
-    5.  [xv6 filesystem](#orgc4b8d48)
-    6.  [linux inode](#org1979988)
-    7.  [indirect block adv](#org3d71d66)
-    8.  [sparse files](#org333810d)
-    9.  [links](#org390097b)
-    10. [fast file system](#org80ca697)
-    11. [NOTE ALL PREVIOUS REFERENCES TO LINUX FS ARE ABOUT ext2](#org8630881)
-    12. [non-FFS solutions](#org9770a4d)
-    13. [FAT IRL](#org6c75e46)
-    14. [reliability](#orgad2d5be)
-        1.  [ordering](#orgf228da7)
-        2.  [beyond ordering (logging)](#orge1d12d4)
-        3.  [snapshots](#org4dd0117)
-    15. [multiple file systems?](#org5e59cba)
-    16. [aside: fsync](#orgce28528)
+1.  [Filesystems](#orgbee5682)
+    1.  [hard drive interfaces](#org2790187)
+    2.  [FAT file system](#org6fcd983)
+    3.  [hard drive operation / performance](#org726b891)
+    4.  [SSD](#org1a4a8c5)
+    5.  [xv6 filesystem](#orgf63decd)
+    6.  [linux inode](#orgfad2770)
+    7.  [indirect block adv](#orge2e7bb2)
+    8.  [sparse files](#orge9e717e)
+    9.  [links](#org50182bb)
+    10. [fast file system](#org0de3085)
+    11. [NOTE ALL PREVIOUS REFERENCES TO LINUX FS ARE ABOUT ext2](#org1e1768d)
+    12. [non-FFS solutions](#org65b2d2f)
+    13. [FAT IRL](#org08a4966)
+    14. [reliability](#org4d8fea1)
+        1.  [ordering](#org11202f8)
+        2.  [beyond ordering (logging)](#org283da4d)
+        3.  [snapshots](#org1aeb1f9)
+    15. [multiple file systems?](#orgb011eeb)
+    16. [aside: fsync](#org215ea8f)
 
 
-<a id="orgebedee3"></a>
+<a id="orgbee5682"></a>
 
 # Filesystems
 
 
-<a id="org99ec366"></a>
+<a id="org2790187"></a>
 
 ## hard drive interfaces
 
@@ -41,7 +41,7 @@
 -   where to put new data for file/ growing file/directory
 
 
-<a id="org99e1c9f"></a>
+<a id="org6fcd983"></a>
 
 ## FAT file system
 
@@ -52,10 +52,10 @@
 -   start locations
     -   want filenames
     -   start locations, size, filename store in directories (also files)
-    -   directories have a list of entres (directory entree is fixed size)
+    -   directories have a list of entries (directory entree is fixed size)
     -   directory entree attr field indicates long dir or short (reg) dir
         -   indicates type of file
-    -   0x00 as first char of nam means end of directory
+    -   0x00 as first char of name means end of directory
         -   0xE5 means 'hole' from deletion
 -   header has metadata about system
     -   where is root dir
@@ -74,7 +74,7 @@
     -   searching a directory is linear
 
 
-<a id="org2a6f6cf"></a>
+<a id="org726b891"></a>
 
 ## hard drive operation / performance
 
@@ -95,10 +95,10 @@
         -   zig zag back and forth (may favor center)
     -   C-SCAN
         -   out to in, reset to outside repeat
--   controller has a cache too, can hold data waiting to be writen
+-   controller has a cache too, can hold data waiting to be written
 
 
-<a id="org757ca40"></a>
+<a id="org1a4a8c5"></a>
 
 ## SSD
 
@@ -106,15 +106,15 @@
 -   no moving parts, read sector-like sizes (pages) eg 4k or 16kb
 -   can only erase in blocks
 -   can only erase blocks order of 10,000-100,000 times
--   moves things around to create ersure blocks
--   wear levening - spread writes out
+-   moves things around to create erasure blocks
+-   wear leavening - spread writes out
 -   Flash translation layer, maps os sector to our sectors
 -   write at writehead,
--   garbage collection: copy parially written blocks to writehead to consolodate free space
--   operation: TRIM, drop this sector, good for os to help ssd
+-   garbage collection: copy partially written blocks to writehead to consolidate free space
+-   operation: TRIM, drop this sector, good for os to help SSD
 
 
-<a id="orgc4b8d48"></a>
+<a id="orgf63decd"></a>
 
 ## xv6 filesystem
 
@@ -136,8 +136,8 @@
     -   each dir referencing an inode is called a hard link
 -   adv over fat
     -   reliability via logs
-    -   easiesr to scan for free blocks
-    -   easyier to find kth block
+    -   easier to scan for free blocks
+    -   easier to find kth block
     -   file type/size stored in inode together
 -   cons
     -   inode block map is far from file data so long seek time
@@ -151,7 +151,7 @@
 -   262144 with indir
 
 
-<a id="org1979988"></a>
+<a id="orgfad2770"></a>
 
 ## linux inode
 
@@ -162,7 +162,7 @@
 -   [14] is triple indirect
 
 
-<a id="org3d71d66"></a>
+<a id="orge2e7bb2"></a>
 
 ## indirect block adv
 
@@ -170,21 +170,21 @@
 -   little over head for more overhead
 
 
-<a id="org333810d"></a>
+<a id="orge9e717e"></a>
 
 ## sparse files
 
 -   theres a special none value for these block pointers if block is all 0s
 
 
-<a id="org390097b"></a>
+<a id="org50182bb"></a>
 
 ## links
 
 -   every file can have multiple links
 -   track number of links delete files with 0 links
 -   open files are links too
-    -   so can do trick: create, open, delete (doesnt dissapear until close)
+    -   so can do trick: create, open, delete (doesnt disappear until close)
 -   ln -> link()
 -   rm -> unlink()
 -   softlinks / symbolic links
@@ -192,23 +192,23 @@
     -   so if delete og, then new is gone too
 
 
-<a id="org80ca697"></a>
+<a id="org0de3085"></a>
 
 ## fast file system
 
--   made by berkley, linux is based on this
+-   made by Berkeley, linux is based on this
 -   address: inode block map far from data, bad choice of file/dir data blocks
 -   block groups
     -   split disk into block groups, each of which is like mini file system
     -   therefore data is close to inodes
     -   inodes from one block group can point to data in another block group
-        -   but perfer not to
+        -   but prefer not to
     -   also keep free map in block group,
     -   makes lower seek time within directory
     -   block groups are designated for specific directories
 -   find free block by first free blocks within block group
     -   hope that for large file this ends up being contiguous
--   deliberately underutilize disk
+-   deliberately under utilize disk
     -   maintain 10% of blocks listed free
     -   that way we can take into account percent full of each block group
     -   use this in some complicated way
@@ -220,12 +220,12 @@
     -   allows one block to store several fragments
 
 
-<a id="org8630881"></a>
+<a id="org1e1768d"></a>
 
 ## NOTE ALL PREVIOUS REFERENCES TO LINUX FS ARE ABOUT ext2
 
 
-<a id="org9770a4d"></a>
+<a id="org65b2d2f"></a>
 
 ## non-FFS solutions
 
@@ -252,14 +252,14 @@
             -   index by filename
 
 
-<a id="org6c75e46"></a>
+<a id="org08a4966"></a>
 
 ## FAT IRL
 
 -   not that bad cus these days just load the FAT into RAM
 
 
-<a id="orgad2d5be"></a>
+<a id="org4d8fea1"></a>
 
 ## reliability
 
@@ -284,7 +284,7 @@
 -   note we havent talked about how RAID handles time b/w updating disk and updating parity disk
 
 
-<a id="orgf228da7"></a>
+<a id="org11202f8"></a>
 
 ### ordering
 
@@ -300,7 +300,7 @@
     2.  file data block
     3.  new file inode
     4.  free block map for new dir block
-    5.  new dir entry for file (in dir blocK)
+    5.  new dir entry for file (in dir block)
     6.  update directory inode
     7.  phil: better to waste space than point to bad data
 -   recovery: fsck (chkdsk on windows)
@@ -313,13 +313,13 @@
     1.  overwrite directory entree
     2.  decrement link count in inode
 -   ex: unlink last link
-    1.  ovewrite last dir entree for file
+    1.  overwrite last dir entree for file
     2.  mark inode data as free
     3.  mark inode as free
 -   ordering sucks for disk speed though
 
 
-<a id="orge1d12d4"></a>
+<a id="org283da4d"></a>
 
 ### beyond ordering (logging)
 
@@ -329,10 +329,10 @@
         -   in log: mark begin (stuff im prob gunna do VV)
         -   write what youre gunna do
         -   mark commit (i am now promising to do this^)
-        -   start apply log ti disk
+        -   start apply log to disk
         -   when commit reached, clear log
     -   if crash before commit, just dont do it
-    -   if crash after commit, just redo it (incase it wasnt done)
+    -   if crash after commit, just redo it (in-case it wasnt done)
     -   consistency b/c commit message and stuff w/in one sector
 -   logged things should be idempotent (ok to do twice)
 -   redo logging file systems called journaling filesystems
@@ -341,7 +341,7 @@
         -   we check if non-zero on boot^ if so redo transaction
     -   data of transactions (blocks) ('what im gunna do' part)
     -   only commit when no active file operation or not enough room in log for more
--   faster to do a large transactioN
+-   faster to do a large transaction
 -   problems
     -   log size - garbage collect log in background
     -   writing everything twice - makes it expensive?
@@ -351,7 +351,7 @@
     -   or literally all data (every bit written gets written twice)
 
 
-<a id="org4dd0117"></a>
+<a id="org1aeb1f9"></a>
 
 ### snapshots
 
@@ -360,13 +360,13 @@
     -   make a new (current) inode with copy on write of file data
     -   old inode lives on with copies of old data
 -   dont want to copy new whole inode array for every version
--   so we split inode array into peices with a root inode pointing to peices
--   then the peices are copy on write with a copy of root inode
+-   so we split inode array into pieces with a root inode pointing to pieces
+-   then the pieces are copy on write with a copy of root inode
 -   array of root inodes is the history
 -   copy on write also avoids the cost of logging since avoids copying
 
 
-<a id="org5e59cba"></a>
+<a id="orgb011eeb"></a>
 
 ## multiple file systems?
 
@@ -380,7 +380,7 @@
 -   common code handles file descriptors
 
 
-<a id="orgce28528"></a>
+<a id="org215ea8f"></a>
 
 ## aside: fsync
 

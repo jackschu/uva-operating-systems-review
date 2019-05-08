@@ -5,7 +5,7 @@
    - what about options for devices or extra operations eg eject
      + eg ioctl for weird things
    - Linux has a struct for file_operations
-     + read write ulocked_ioctl mmap open releases
+     + read write unblocked_ioctl mmap open releases
      + special case block devices
    - block devices (devices that work in terms of blocks) eg disk
      + struct block_device_operations

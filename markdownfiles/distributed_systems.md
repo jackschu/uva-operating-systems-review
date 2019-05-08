@@ -1,79 +1,79 @@
 
 # Table of Contents
 
-1.  [Distributed Systems:  multiple machines on one task](#org2a13078)
-    1.  [Models](#org2f4247c)
-        1.  [client-server model](#orgaadee17)
-        2.  [peer-to-peer model](#org6b0ae42)
-    2.  [why dsitributed](#org4b3eae9)
-    3.  [mailbox model (abstraction)](#org8fc26f9)
-        1.  [connections](#orgeff2c3b)
-    4.  [DNS/addresses](#orgf3d1e60)
-    5.  [Protocol](#org0822b91)
-    6.  [Sockets](#org97365dc)
-        1.  [Incomplete Writes](#orgf86aa9b)
-        2.  [Read and write at same time](#org5cb9559)
-    7.  [Remote Procedure Calls (RPCs)](#org7c0ccd5)
-        1.  [Interface Description Language IDL](#orga697d82)
-        2.  [gRPC](#orga983212)
-        3.  [Failure to be transparent](#org1f155da)
-        4.  [RPC locally](#org04b84f9)
-    8.  [Network Filesystems](#orgfed7d86)
-        1.  [NFS version 2 (RFC 1094) 1989](#org92bd4d9)
-        2.  [Performance improvement NFSv3](#org7efe718)
-        3.  [Andrew File System v2](#orgd5a8c0d)
-    9.  [Dealing with network failures](#org2c4c764)
-        1.  [distributed transaction](#orgbfa7d8b)
+1.  [Distributed Systems:  multiple machines on one task](#org0079890)
+    1.  [Models](#org950e011)
+        1.  [client-server model](#org99b0d90)
+        2.  [peer-to-peer model](#org400a5b7)
+    2.  [why distributed](#org3c0c767)
+    3.  [mailbox model (abstraction)](#orga3b7c08)
+        1.  [connections](#org95e4dc7)
+    4.  [DNS/addresses](#orgda78baf)
+    5.  [Protocol](#org0d3a481)
+    6.  [Sockets](#orgbbd8e68)
+        1.  [Incomplete Writes](#orgdca74e8)
+        2.  [Read and write at same time](#orgb7566e9)
+    7.  [Remote Procedure Calls (RPCs)](#org952bc7f)
+        1.  [Interface Description Language IDL](#orgf47b5c1)
+        2.  [gRPC](#orge8a8283)
+        3.  [Failure to be transparent](#org143338c)
+        4.  [RPC locally](#org876322c)
+    8.  [Network Filesystems](#orgd655073)
+        1.  [NFS version 2 (RFC 1094) 1989](#org7167390)
+        2.  [Performance improvement NFSv3](#orgc8c6eed)
+        3.  [Andrew File System v2](#orgc73ce10)
+    9.  [Dealing with network failures](#org1d6bb7c)
+        1.  [distributed transaction](#org39b2138)
 
 
-<a id="org2a13078"></a>
+<a id="org0079890"></a>
 
 # Distributed Systems:  multiple machines on one task
 
 
-<a id="org2f4247c"></a>
+<a id="org950e011"></a>
 
 ## Models
 
 
-<a id="orgaadee17"></a>
+<a id="org99b0d90"></a>
 
 ### client-server model
 
--   centeral point of failure, but simple
+-   central point of failure, but simple
 -   client: sometimes on, server: always on
 -   server never initiates
 -   layers of servers happen often
-    -   webserver talks to cache talks to app server talks to login server
+    -   web server talks to cache talks to app server talks to login server
 
 
-<a id="org6b0ae42"></a>
+<a id="org400a5b7"></a>
 
 ### peer-to-peer model
 
 -   no always-on server
     -   hopefully no scaling issues
--   any machiine talk to any machine
+-   any machine talk to any machine
 
 
-<a id="org4b3eae9"></a>
+<a id="org3c0c767"></a>
 
-## why dsitributed
+## why distributed
 
--   multiple owners collaborlating
--   delegation of responsability
+-   multiple owners collaborating
+-   delegation of responsibility
 -   combine cheap machines
 -   easier to add incrementally
 -   allows redundancy
 
 
-<a id="org8fc26f9"></a>
+<a id="orga3b7c08"></a>
 
 ## mailbox model (abstraction)
 
 -   its an abstraction (send/receive message)
--   machine A to newtwork to machine B
--   network has a queue of messages not yet recieved by recieving program
+-   machine A to network to machine B
+-   network has a queue of messages not yet received by receiving program
 -   how to reply to client as server? where did msg come from?
 -   how to receive multiple messages (multi part messages)
 -   can build with mailbox idea
@@ -82,14 +82,14 @@
 -   abstraction that does all this is a connection
 
 
-<a id="orgeff2c3b"></a>
+<a id="org95e4dc7"></a>
 
 ### connections
 
 -   two-way channel for messages
 -   extra operations: connect(request to a machine), accept(a connection)
 -   this is how the real internet works
--   connections ~= two-directional pips
+-   connections ~= two-directional pipes
     -   In fact same API in POSIX
 -   how to specify machine?
     -   name: logical id eg www.va.edu or notes.txt
@@ -97,7 +97,7 @@
     -   conversion done through DNS (domain name system)
 
 
-<a id="orgf3d1e60"></a>
+<a id="orgda78baf"></a>
 
 ## DNS/addresses
 
@@ -124,7 +124,7 @@
     -   49152-onward os uses whenever
 
 
-<a id="org0822b91"></a>
+<a id="org0d3a481"></a>
 
 ## Protocol
 
@@ -136,7 +136,7 @@
 -   status codes are typical
 
 
-<a id="org97365dc"></a>
+<a id="orgbbd8e68"></a>
 
 ## Sockets
 
@@ -171,7 +171,7 @@
         -   getsockname getpeername getnameinfo
 
 
-<a id="orgf86aa9b"></a>
+<a id="orgdca74e8"></a>
 
 ### Incomplete Writes
 
@@ -182,7 +182,7 @@
 -   therefore write fully or fill buffer or readline funcs are needed
 
 
-<a id="org5cb9559"></a>
+<a id="orgb7566e9"></a>
 
 ### Read and write at same time
 
@@ -190,7 +190,7 @@
 -   other solution event loop with nonblocking i/o functions eg select, poll
 
 
-<a id="org7c0ccd5"></a>
+<a id="org952bc7f"></a>
 
 ## Remote Procedure Calls (RPCs)
 
@@ -208,23 +208,23 @@
     -   server stub
         -   also generated by compiler
         -   converts bytes to args, and return value to bytes
-    -   stubs conncected via network and rpc library on each side of network
+    -   stubs connected via network and rpc library on each side of network
 -   RPC's have a field called context
     -   specify where the function actually is
 -   we can hide a surprising amount of this detail with OO design
--   marshalling or serialization
+-   marshaling or serialization
     -   cant just copy the bytes cus like what is char\*?
     -   what about 32 vs 64 bit and endianness
-    -   note marshalling is useful even if not rpc (ex protocol buffers)
+    -   note marshaling is useful even if not rpc (ex protocol buffers)
 
 
-<a id="orga697d82"></a>
+<a id="orgf47b5c1"></a>
 
 ### Interface Description Language IDL
 
 -   tool/library needs to know what remote procedures exist and what types they do
 -   this is specified by RPC server author in IDL
--   compiled into stubs and marshalling / unmarshalling code
+-   compiled into stubs and marshaling / unmarshalling code
 -   why not just give a header file?
     -   what does my pointer point to?(size)
     -   portability, size on different compilers
@@ -239,7 +239,7 @@
 -   fields also numbered
 
 
-<a id="orga983212"></a>
+<a id="orge8a8283"></a>
 
 ### gRPC
 
@@ -258,7 +258,7 @@
     -   or just make api v2 a whole new protocol
 
 
-<a id="org1f155da"></a>
+<a id="org143338c"></a>
 
 ### Failure to be transparent
 
@@ -273,7 +273,7 @@
     -   does the server keep it open?
 
 
-<a id="org04b84f9"></a>
+<a id="org876322c"></a>
 
 ### RPC locally
 
@@ -282,7 +282,7 @@
 -   allowed shared memory implementation to get speed back
 
 
-<a id="orgfed7d86"></a>
+<a id="orgd655073"></a>
 
 ## Network Filesystems
 
@@ -302,7 +302,7 @@
         -   milliseconds instead of microseconds
 
 
-<a id="org92bd4d9"></a>
+<a id="org7167390"></a>
 
 ### NFS version 2 (RFC 1094) 1989
 
@@ -316,7 +316,7 @@
     -   server doesnt get notified unless client is using the file
 -   generation number 
     -   incremented every time inode is reused
-    -   so this prefents opening wrong file if inode num still valid
+    -   so this prevents opening wrong file if inode num still valid
     -   stored in inode
 -   this is a stateless server protocol, no open/close/etc
 -   read dir takes optional cookie and returns next cookie
@@ -330,14 +330,14 @@
     -   offline operation not doable
 
 
-<a id="org7efe718"></a>
+<a id="orgc8c6eed"></a>
 
 ### Performance improvement NFSv3
 
 -   caching copies causes lots of consistency problems
 -   gotta tell server about every update write away? means no caching
 -   solution: allow inconsistency (some kinds only) :(
--   we probably expect this inconcsitency anyways
+-   we probably expect this inconsistency anyways
 -   we want open to close consistency
     -   opening a file checks for updated version
     -   closing a file writes updates from the cache
@@ -346,7 +346,7 @@
     -   fix: check server/write to server periodically
 
 
-<a id="orgd5a8c0d"></a>
+<a id="orgc73ce10"></a>
 
 ### Andrew File System v2
 
@@ -369,12 +369,12 @@
     -   has issues (what to do when conflict)
 
 
-<a id="org2c4c764"></a>
+<a id="org1d6bb7c"></a>
 
 ## Dealing with network failures
 
 -   no real great way to do this, maybe the 'dont need to retry' msg doesnt make it
--   try2 (idemptotent requests):
+-   try2 (idempotent requests):
     -   req: do thing
     -   resp: ok did it (failed msg)
     -   req: do thing if you havent
@@ -392,12 +392,12 @@
     -   requires 3f + 1 to handle f byzantine failures
 
 
-<a id="orgbfa7d8b"></a>
+<a id="org39b2138"></a>
 
 ### distributed transaction
 
 -   goal: we all do it or we all dont
--   centraliized solution?
+-   centralized solution?
     -   machine d maintains redo log for all machines
     -   machine d treats all others as data storage
     -   but uh not a distribute system
@@ -426,7 +426,7 @@
     -   c -> w prepare
     -   w -> c vote commit or vote abort
     -   c -> w global commit or global abort
--   four coordinated states INIT, WAITING, ABORTED, COMMITED
+-   four coordinated states INIT, WAITING, ABORTED, COMMITTED
     -   resend prepare messages periodically
     -   workers also resent vote periodically
 -   coordinator failure recovery
@@ -452,7 +452,7 @@
     -   leader uses other maches as remote logs
     -   leader ensures quorum logs operations
 -   what about byzantine failures?
-    -   supermajority needed 3f+1
+    -   super majority needed 3f+1
     -   nodes can give inconsistent votes
     -   just overlap is not enough
 

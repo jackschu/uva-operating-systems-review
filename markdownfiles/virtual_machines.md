@@ -1,27 +1,27 @@
 
 # Table of Contents
 
-1.  [Virtual machines notes](#orgd40059d)
-    1.  [recall virtual machine interface](#orgfe06abc)
-    2.  [System virtual machine](#org2d5331c)
-    3.  [How to do it?](#orgfeeec04)
-    4.  [Address terms (for these notes)](#orgdad2940)
-    5.  [Proc control block for guest OS](#org7a7b598)
-    6.  [basic hypervisor flow](#org57bd5c8)
-        1.  [what about memory mapped I/O?](#org703efd9)
-        2.  [This doesnt work for everything though](#orgb0a04d9)
-    7.  [What about guest OS virtual memory](#org764ab25)
-    8.  [Shadow page table synthesis](#orgd3a6355)
-    9.  [Hardware hypervisor support](#org318c9be)
-    10. [Non-virtualizable Instructions](#org07d6ffd)
+1.  [Virtual machines notes](#org0ec13b3)
+    1.  [recall virtual machine interface](#org37740a6)
+    2.  [System virtual machine](#orge26038f)
+    3.  [How to do it?](#orgc384826)
+    4.  [Address terms (for these notes)](#org428fe29)
+    5.  [Proc control block for guest OS](#org2c4f1b1)
+    6.  [basic hypervisor flow](#org8ff556d)
+        1.  [what about memory mapped I/O?](#orgb3cd1a0)
+        2.  [This doesnt work for everything though](#orgcbbd138)
+    7.  [What about guest OS virtual memory](#org60dc628)
+    8.  [Shadow page table synthesis](#org8c52cf3)
+    9.  [Hardware hypervisor support](#orgb34799f)
+    10. [Non-virtualizable Instructions](#orgc68cfd7)
 
 
-<a id="orgd40059d"></a>
+<a id="org0ec13b3"></a>
 
 # Virtual machines notes
 
 
-<a id="orgfe06abc"></a>
+<a id="org37740a6"></a>
 
 ## recall virtual machine interface
 
@@ -29,7 +29,7 @@
 -   it isolates an application
 
 
-<a id="org2d5331c"></a>
+<a id="orge26038f"></a>
 
 ## System virtual machine
 
@@ -45,7 +45,7 @@
     -   this can be fuzzy: what if we need device driver for vm? which one is it? unclear
 
 
-<a id="orgfeeec04"></a>
+<a id="orgc384826"></a>
 
 ## How to do it?
 
@@ -54,7 +54,7 @@
     -   what qemu does
 
 
-<a id="orgdad2940"></a>
+<a id="org428fe29"></a>
 
 ## Address terms (for these notes)
 
@@ -63,7 +63,7 @@
 -   machine addr: phy addr for hypervisor/host OS
 
 
-<a id="org7a7b598"></a>
+<a id="org2c4f1b1"></a>
 
 ## Proc control block for guest OS
 
@@ -74,28 +74,28 @@
     -   if guest OS thinks its running in kernel mode
 
 
-<a id="org57bd5c8"></a>
+<a id="org8ff556d"></a>
 
 ## basic hypervisor flow
 
 -   run guest OS in user mode
 -   other OS stuff causes exceptions that hypervisor now handles
-    -   eg disable interupts, use hardware etc
+    -   eg disable interrupts, use hardware etc
 -   making io / kern mode instructions work
     -   trap and emulate
-    -   force instruction to cause a fualt
+    -   force instruction to cause a fault
     -   fault hander does what instruction would do
     -   eg i/o
         -   guest os: try to access keyboard
         -   causes trap
-        -   if guest os thinks its in pretent kernel mode
+        -   if guest os thinks its in pretend kernel mode
         -   hypervisor reads from keyboard on behalf of guest os
         -   hypervisor updates guest os state and switches back
 -   making exceptions/interrupts work
     -   reflect exceptions/interrupts into guest os
     -   eg system call (exception in hw)
     -   hw calls exception handler in hypervisor
-    -   lookup excpetion handler in guest os
+    -   lookup exception handler in guest os
     -   update page table to be in hypervisor kernel mode
     -   return to guest os's syscall handler with kernel mode enabled
     -   after return from system call handler
@@ -110,7 +110,7 @@
 -   hypervisor lets guest os pretend its in kernel mode
 
 
-<a id="org703efd9"></a>
+<a id="orgb3cd1a0"></a>
 
 ### what about memory mapped I/O?
 
@@ -121,7 +121,7 @@
     -   or a regular page fault
 
 
-<a id="orgb0a04d9"></a>
+<a id="orgcbbd138"></a>
 
 ### This doesnt work for everything though
 
@@ -130,7 +130,7 @@
 -   there are work arounds but they're annoying
 
 
-<a id="org764ab25"></a>
+<a id="org60dc628"></a>
 
 ## What about guest OS virtual memory
 
@@ -145,13 +145,13 @@
         -   made by hypervisor combining guest page table and hyper pt
 
 
-<a id="orgd3a6355"></a>
+<a id="org8c52cf3"></a>
 
 ## Shadow page table synthesis
 
 -   creating new page table
 -   when to create new shadow page table?
-    -   its p expenseive, dont want to do it often
+    -   its p expensive, dont want to do it often
     -   trick: use the Translation Lookaside Buffer (cache for pte)
 -   TLB has the same problem (contents synthesized from normal page table)
 -   processor also needs to decide when to update it
@@ -160,7 +160,7 @@
     -   when os sets pte, tlb is out of sync
     -   so the procs are supposed to tell os when the update page table
     -   note this implies we can use that telling to update shadow pt
--   in some sense, the shadow page table is immitating tlb a virtual tlb
+-   in some sense, the shadow page table is imitating tlb a virtual tlb
     -   it caches page tables entrees just like tlb, filled in by hypervisor
     -   update on demand
 -   shadow page table is used by hypervisor
@@ -188,25 +188,25 @@
     -   how many real/shadow pt [6 (maybe 5)]
 
 
-<a id="org318c9be"></a>
+<a id="orgb34799f"></a>
 
 ## Hardware hypervisor support
 
--   intel's VT-x:
+-   Intel's VT-x:
 -   HW tracks whether a vm is running
 -   new VMENTER instruction
     -   switches page tables, sets prog counter etc
     -   this makes all x86 bad boi instructions cause exceptions (configurable)
--   similar VMEXIT iinstruction
+-   similar VMEXIT instruction
     -   exits vm is running mode, switch to hypervisor
--   this way can run guest OS direclty on the hw for most things
+-   this way can run guest OS directly on the hw for most things
 -   some things cause VMEXIT (hypervisor enter) some things run directly on hw
 -   allows us to have one shadow pg table for both user kernel per proc
--   taggd tlbs:
+-   tagged tlbs:
     -   address space in TLB entries
     -   helps normal OS (faster context switching)
-    -   hypervisor and or os sets address space ID when switchinig page tables
-    -   makes extra work for OS/hypervisor (needs to flush TLB entries even when changine non-active pt)
+    -   hypervisor and or os sets address space ID when switching page tables
+    -   makes extra work for OS/hypervisor (needs to flush TLB entries even when changing non-active pt)
 -   nested page tables:
     -   allows hypervisor to specify two page table base registers
     -   then the hardware walks both page tables whenever it needs to do lookup
@@ -216,7 +216,7 @@
     -   this is even more for 4 level page tables (more realistic)
 
 
-<a id="org07d6ffd"></a>
+<a id="orgc68cfd7"></a>
 
 ## Non-virtualizable Instructions
 

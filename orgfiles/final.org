@@ -79,7 +79,7 @@
    - load code this way
    - does copy on write for you
    - how it works
-     + proc contrl block contains list of regions
+     + proc control block contains list of regions
      + can share mmapd stuff with cache
    - mmap can be used to shaRe memory b/w programs
  
@@ -109,15 +109,15 @@
    - a user program running in guest os tries to access unallocated memory
    - this mem will be alloc on demand by guest  os, what will happen
      + user's mem will trigger page fault in host os
-     + WRONG: the host os pg fault handler will udpate the guest os system page table then resume
+     + WRONG: the host os pg fault handler will update the guest os system page table then resume
        * not correct, because hypervisor doesnt touch guest page table itself
-       * guest os is the one that wants to ahve this allocated on deman, not the host os
+       * guest os is the one that wants to have this allocated on demand, not the host os
      + WRONG: host pg fault handler will cause guest os fault handler to run in kernel mode
        * hyper never runs guest os in kernel mode (unless hw virt support)
      + RIGHT: host pg fault handler will cause guest os fault handler to run in user mode
        * "reflecting the exception"
    - q2: last-level guest page table has ppn 0x40,
-   - guest physcial mem starts at 0x1000000 (machine pg num 0x1000, offset 0x0)
+   - guest physical mem starts at 0x1000000 (machine pg num 0x1000, offset 0x0)
      + 4k pages, 12-bit page offset
    - what does the shadow pte corresponding to this look like
    - mapped contiguously
@@ -137,26 +137,26 @@
      + better for usb
      + even required for some graphics stuff since buffer would be too small otherwise
 
-** device controllver vs driver
+** device controller vs driver
    - driver is on os
      + response to interrupts, knows how to communicate with device controller
-   - contoller is part of device hardware
+   - controller is part of device hardware
 
 ** page replace policies
    - real lru is too expense b/c page fault on every read or write
    - approximations (not recently used)
      + second chance (one list) mark accessed 
      + seq
-       * keep two oredered list
+       * keep two ordered list
        * active assume prob used
        * inactive guess unused
        * move pages from active to inactive
        * only update inactive pages as accessed
      + clock: general idea of scan + clear "was it accessed information"
        * and do something with recent history for each page
-       * ie was it acccessed when i checked it n times ago
+       * ie was it accessed when i checked it n times ago
    - secondary family (when lru is wrong) eg files
-     + clockpro: allow things to be evicted if they arent accessed twice (with some interval in between or twice with read() calls)
+     + clock pro: allow things to be evicted if they arent accessed twice (with some interval in between or twice with read() calls)
 
 ** pros and cons of FSs
    - FAT filesystem
@@ -169,16 +169,16 @@
      + dirs arent automatically close to files
    - FFS-like filesystems
      + use fragments (small files)
-     + blcok groups (close to each other)
+     + block groups (close to each other)
      + have all free-block info in one place
    - other FS features
      + extents:
        - pro: good for large files
        - con: more complicated to alloc/seek through
      + trees for dirs
-       - pro: more effiicient to find filename in dir
+       - pro: more efficient to find filename in dir
        - con: more complicated to do things
-     + jorurnaling/logging
+     + journaling/logging
        + pro: recovery from failures
        + pro: faster writes
        + con: more complicated to implement

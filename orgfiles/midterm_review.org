@@ -1,6 +1,6 @@
 * Midterm review for Operating Systems
 
-** Parital reads /writes
+** Partial reads /writes
    - Posix has read write, partial writes can occur because:
    - they return whatever they can (sometimes not everything)
      + wait until at least one byte
@@ -46,8 +46,8 @@
        * wait time/ turnaround 
 	 - interactivity optimizing  / get io to happen sooner
 	 - SJF/SRTF -- ie run shortest CPU burst (cant do this)
-	 - MLFQ (multilevel feedback queue) (actually dooable)
-       * meetind deadlines -- earliest deadline first
+	 - MLFQ (multilevel feedback queue) (actually doable)
+       * meeting deadlines -- earliest deadline first
 
 ** process vs threads
    - thread -- what gets run on a cpu
@@ -66,11 +66,11 @@
 
 ** cache coherency
    - invalid = not cached
-   - modifed = cached copy thats newer than memory
+   - modified = cached copy thats newer than memory
    - shared = multiple processors have valid cached copies
 
 ** addr translation
-   - take virt addr, spit into vpn, and page offser
+   - take virt addr, spit into vpn, and page offset
    - split vpn into parts for each level
    - do an array lookup based on split for vpn at each level
    - use given base addr for first level
@@ -84,10 +84,10 @@
 
 ** avoiding busy waits
    - scenario: waiting for event to happen
-     + naive (busywait) continuously check if it happened
+     + naive (busy wait) continuously check if it happened
    - primitives to help:
      + condition variables, (protected by lock)
-       * check if happened else wait, when happens , get broadcast/singal
+       * check if happened else wait, when happens , get broadcast/signal
        * recheck on wake due to spurious wakeups
      + semaphores:
        * P/down/wait - wait to become positive then dec
@@ -99,7 +99,7 @@
        * wait (down) on semaphore
        * if someone's stared waiting then post (up) on semaphore
 
-** implementing spinlock
+** implementing spin lock
    - simplest strat: atomic operation that reads a val then writes LOCKED
    - if we read unlocked, we know that this thread can go and lock it
      + test and set, did we change it? no? try again?

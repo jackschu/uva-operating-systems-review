@@ -1,36 +1,36 @@
 
 # Table of Contents
 
-1.  [Virtual memory notes](#orgcdd040e)
-    1.  [Last Time: deadlock](#orgf320311)
-    2.  [Toy example](#org9588812)
-    3.  [Two-level page tables](#org3300f61)
-    4.  [The XV-6 way](#org9136ded)
-    5.  [space on demand](#org2373419)
-    6.  [copy on write](#orgee4ad7b)
-    7.  [mmap](#org75ac49c)
-    8.  [memory is a cache for disk](#org7f89ec9)
-    9.  [Linux: forward mapping (file access)](#org0dd1551)
-    10. [minor vs major page fault](#org9cfc8f4)
-    11. [on miss](#org4004ee4)
-    12. [physical pages are manged](#org99fca06)
-    13. [evicting page](#org49c80ee)
-        1.  [working set model ](#org1d15285)
-        2.  [aside zipf model ](#org4e229e3)
-        3.  [lru model ](#org89bf254)
-    14. [Lazy replacement or not](#orga9f5999)
-    15. [caching for files?](#orgcaba1ce)
-    16. [proactive loading](#org47a7d8a)
-    17. [thrasing](#org1353610)
-    18. [fair paging replacement?](#org6fb2326)
+1.  [Virtual memory notes](#org4450db0)
+    1.  [Last Time: deadlock](#org7504a36)
+    2.  [Toy example](#org289c71c)
+    3.  [Two-level page tables](#orgdd55462)
+    4.  [The XV-6 way](#org5ebc09f)
+    5.  [space on demand](#org6ecb46e)
+    6.  [copy on write](#orgbffd4fe)
+    7.  [mmap](#org9bf422b)
+    8.  [memory is a cache for disk](#org66d1a60)
+    9.  [Linux: forward mapping (file access)](#org0e8802d)
+    10. [minor vs major page fault](#org13113e1)
+    11. [on miss](#org9227a93)
+    12. [physical pages are managed](#org2c97958)
+    13. [evicting page](#org9efca9c)
+        1.  [working set model ](#org4ede0c5)
+        2.  [aside Zipf model ](#orge636a42)
+        3.  [lru model ](#org28eaff9)
+    14. [Lazy replacement or not](#org5473241)
+    15. [caching for files?](#org46ba499)
+    16. [proactive loading](#org04ad396)
+    17. [thrashing](#orgb79612c)
+    18. [fair paging replacement?](#orgd4971f2)
 
 
-<a id="orgcdd040e"></a>
+<a id="org4450db0"></a>
 
 # Virtual memory notes
 
 
-<a id="orgf320311"></a>
+<a id="org7504a36"></a>
 
 ## Last Time: deadlock
 
@@ -42,11 +42,11 @@
 -   deadlock detection
     -   dependency graph to detect
     -   single resource: look for cycles
-    -   mutli-resource: imagine threads finishing
+    -   multi-resource: imagine threads finishing
     -   thing called Baker's Algorithm: if it will cause deadlock: dont start
 
 
-<a id="org9588812"></a>
+<a id="org289c71c"></a>
 
 ## Toy example
 
@@ -59,7 +59,7 @@
 -   Page table is stored in memory with physical memory addr
 
 
-<a id="org3300f61"></a>
+<a id="orgdd55462"></a>
 
 ## Two-level page tables
 
@@ -71,13 +71,13 @@
 -   user bit - true if can access in user mode
 
 
-<a id="org9136ded"></a>
+<a id="org5ebc09f"></a>
 
 ## The XV-6 way
 
 -   Page Directory Index PDX is first level page table index
 -   Page Table Index PTX is the second level table index
--   Page frame is a physical page (intell)
+-   Page frame is a physical page (Intel)
 -   kernbase = 0x8000000 , above it is kernel only memory
 -   every physical addr in xv6 has two virtual addrs, one for ker, one for user
 -   P2V and V2P map kernel virtual to physical (!not user virtual)
@@ -85,16 +85,16 @@
 -   sbrk() sets break between heap and invalid memory
 
 
-<a id="org2373419"></a>
+<a id="org6ecb46e"></a>
 
 ## space on demand
 
 -   useful to telling program they have huge RAM
--   trick: push decreases rsp first so uhh invald page num might be lower
+-   trick: push decreases rsp first so uhh invalid page num might be lower
 -   xv6 checks bounds using sz
 
 
-<a id="orgee4ad7b"></a>
+<a id="orgbffd4fe"></a>
 
 ## copy on write
 
@@ -103,13 +103,13 @@
 -   tell page table that shared part is read-only (both parent and child)
 
 
-<a id="org75ac49c"></a>
+<a id="org9bf422b"></a>
 
 ## mmap
 
 -   map a file to spot in memory
 -   eg:
-    -   int file = open("somefile.dat", O<sub>RDWR</sub>);
+    -   int file = open("some-file.dat", O<sub>RDWR</sub>);
     -   char \*data = mmap(&#x2026; , file, 0);
     -   data[100] = 'x';
 -   options: 
@@ -127,7 +127,7 @@
 -   swapping is approx mmap with default files (using disk as backup)
 
 
-<a id="org7f89ec9"></a>
+<a id="org66d1a60"></a>
 
 ## memory is a cache for disk
 
@@ -138,7 +138,7 @@
 -   virtual addr on cache hit: page table gets accessed (no os needed)
 
 
-<a id="org0dd1551"></a>
+<a id="org0e8802d"></a>
 
 ## Linux: forward mapping (file access)
 
@@ -153,7 +153,7 @@
     -   for file access waits for page fault then updates page table
 
 
-<a id="org9cfc8f4"></a>
+<a id="org13113e1"></a>
 
 ## minor vs major page fault
 
@@ -162,12 +162,12 @@
 -   major page fault: not cached, need to allocate
 
 
-<a id="org4004ee4"></a>
+<a id="org9227a93"></a>
 
 ## on miss
 
 -   file: OS data structure based on filesystem
-    -   filesystem is black box which gives pys addr
+    -   filesystem is black box which gives phys addr
 -   virtual address (if part of file): use linux mmap regions
 -   swapped out pages get location stored in unused region of invalid pte
     -   note that this is elegant because pte only gets overwrote if
@@ -176,9 +176,9 @@
         -   full page table doesnt really happen
 
 
-<a id="org99fca06"></a>
+<a id="org2c97958"></a>
 
-## physical pages are manged
+## physical pages are managed
 
 -   how to find free physical page to use
 -   track usage (linux uses a list of LRU pages) (a lil more complex than this)
@@ -193,14 +193,14 @@
             -   has pointer to page table
             -   so that given ppn, we can remove/ invalidate references to that page
         -   for non-file pages linux:
-            -   every page ihas linked list of mmap regions
+            -   every page has linked list of mmap regions
                 -   list is important b/c makes fork easy
             -   which points to mmap region info
             -   points to proc control block
             -   points to page table
 
 
-<a id="org49c80ee"></a>
+<a id="org9efca9c"></a>
 
 ## evicting page
 
@@ -212,23 +212,23 @@
             -   best assuming no reading in advance
             -   called belady's min also impossible
         -   cant to belady so look for patterns
-        -   working set model [more here](#org5fb96e2)
+        -   working set model [more here](#org0ee6ab7)
             -   motivation: program usually uses a subset of its memory
             -   phase change: discard current working set, get another
             -   phase change results in spike of cache misses
             -   how to use it? one idea: split memory into working set/not
             -   if not enough space for all of working set, stop program do later
-        -   LRU model [1.13.3](#orgc345b8a)
+        -   LRU model [1.13.3](#orgecdb4ef)
 -   note hit rate not equal throughput
     -   since algo for choosing could be slow
     -   cost of miss could be dramatically variable (ie NFS vs HDD fetch)
     -   create zero page could happen on miss (very fast)
-    -   grouping reads not considered in hit rate, but considered in throuput
+    -   grouping reads not considered in hit rate, but considered in throughput
 
 
-<a id="org1d15285"></a>
+<a id="org4ede0c5"></a>
 
-### working set model <a id="org5fb96e2"></a>
+### working set model <a id="org0ee6ab7"></a>
 
 -   motivation: program usually uses a subset of its memory
 -   phase change: discard current working set, get another
@@ -240,9 +240,9 @@
     -   doesnt always work, there are bad cases (ie working set doesnt fit)
 
 
-<a id="org4e229e3"></a>
+<a id="orge636a42"></a>
 
-### aside zipf model <a id="org26b5e8d"></a>
+### aside Zipf model <a id="org79ad167"></a>
 
 -   straight line on log-log rank v count access graph
 -   long tail
@@ -250,14 +250,14 @@
 -   what about changes in popularity?
 
 
-<a id="org89bf254"></a>
+<a id="org28eaff9"></a>
 
-### lru model <a id="orgc345b8a"></a>
+### lru model <a id="orgecdb4ef"></a>
 
 -   no one does this exactly since requires page fault on every access
 -   so we approximate LRU = "was this accessed recently?"
 -   is it currently still being used?
-    -   can do sw approach: mark it invald check if page fault happens
+    -   can do sw approach: mark it invalid check if page fault happens
         -   update last known access if accessed/referenced
     -   can do hw approach: hardware sets a bit to 1 during access
         -   os periodically reads + record + clears access bit
@@ -282,7 +282,7 @@
     -   track pages over time window, periodically check for accesses
 
 
-<a id="orga9f5999"></a>
+<a id="org5473241"></a>
 
 ## Lazy replacement or not
 
@@ -295,7 +295,7 @@
     -   to alloc, remove from free linked list (v fast)
 
 
-<a id="orgcaba1ce"></a>
+<a id="org46ba499"></a>
 
 ## caching for files?
 
@@ -304,19 +304,19 @@
 -   CLOCK-Pro: special casing for one-use pages
     -   files cant be protected in cache (by lru) until second access
     -   new files to top of inactive list
-    -   if on inactive list and referenced once, idk ingore but track
+    -   if on inactive list and referenced once, idk ignore but track
     -   if on inactive list and referenced twice, move to top of active
     -   if on bottom of active list and referenced, move to top of active
     -   else if on bottom of active, move to top of inactive
-    -   results in evicting if refrenced once or referenced mult but not recently
+    -   results in evicting if referenced once or referenced mult but not recently
 
 
-<a id="org47a7d8a"></a>
+<a id="org04ad396"></a>
 
 ## proactive loading
 
 -   do we have to load into cache on demand? do it ahead of time?
--   readahead: try and predict sequential reads
+-   read-ahead: try and predict sequential reads
 -   naive irony, if naively load ahead, we dont page fault anymore so
     -   we cant know if we should keep reading ahead (can force pg fault tho)
 -   how much to readahead?
@@ -324,20 +324,20 @@
     -   read ahead x amount, set trap at x/2 ish, then read more if triggered
 
 
-<a id="org1353610"></a>
+<a id="orgb79612c"></a>
 
-## thrasing
+## thrashing
 
 -   always reading from disk, causes performance collapse
 
 
-<a id="org6fb2326"></a>
+<a id="orgd4971f2"></a>
 
 ## fair paging replacement?
 
 -   share between users?
 -   linux has cgroups
-    -   each has high limit- cant use more than this many pages (replace thiers first)
+    -   each has high limit- cant use more than this many pages (replace theirs first)
     -   low limit - dont steal from this group when using less than this many
     -   max - actively deallocate if youre using
 
